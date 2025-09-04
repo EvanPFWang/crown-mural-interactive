@@ -4,14 +4,9 @@ import { resolve } from 'path';
 export default defineConfig({
   build: {
     target: 'es2022',
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-        pure_funcs: ['console.log']
-      }
-    },
+    // remove: minify: 'terser'
+    // remove: terserOptions: { ... }
+    // (esbuild is the default minifier)
     rollupOptions: {
       output: {
         manualChunks: {
@@ -20,7 +15,10 @@ export default defineConfig({
       }
     }
   },
-  server: {
-    port: 3000
-  }
-});
+  // esbuild-specific options live at top level in Vite config:
+  esbuild: {
+    drop: ['console', 'debugger'],   // like drop_console + drop_debugger
+    pure: ['console.log']            // like pure_funcs: ['console.log']
+  },
+  server: { port: 3000 }
+})
